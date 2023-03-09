@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { IDayplan } from "../../common/types/Dayplan";
+import { IDayplanModel } from "../../common/types/Dayplan";
 
-const dayPlanSchema = new mongoose.Schema<IDayplan>({
+const dayPlanSchema = new mongoose.Schema<IDayplanModel>({
     tasks: [{
         startTime: {
             type: Date,
@@ -23,4 +23,4 @@ const dayPlanSchema = new mongoose.Schema<IDayplan>({
     dayGoals: [String]
 });
 
-export const DayPlanModel = mongoose.model("DayPlan", dayPlanSchema);
+export const DayPlanModel = mongoose.model<IDayplanModel>("DayPlan", dayPlanSchema);

@@ -1,8 +1,22 @@
 import mongoose from "mongoose";
 import passportLocalMongoose from "passport-local-mongoose"
-import {IUser} from "../../common/types/User"
+import {IUserModel} from "../../common/types/User"
 
-const UserSchema = new mongoose.Schema<IUser>({
+//declaration merging for the passport plugin
+declare global {
+    namespace Express {
+      interface User extends IUserModel {
+      }
+    }  
+}
+declare module 'express-session' {
+  interface SessionData {
+    user?: IUserModel;
+  }
+}
+
+
+const UserSchema = new mongoose.Schema<IUserModel>({
     dayPlans: [{
         type: mongoose.Types.ObjectId,
         ref: "DayPlan"
@@ -12,4 +26,4 @@ const UserSchema = new mongoose.Schema<IUser>({
 
 UserSchema.plugin(passportLocalMongoose);
 
-export const UserModel = mongoose.model<IUser>("User", UserSchema);
+export const UserModel = mongoose.model<IUserModel>("User", UserSchema);
