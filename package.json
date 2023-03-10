@@ -9,11 +9,13 @@
     "devbuildbackend": "tsc --watch --project ./src/backend/tsconfig.json",
     "dev": "concurrently \"npm run dev:back\" \" npm run dev:front\" ",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.6",
     "@reduxjs/toolkit": "^1.9.3",
+    "bcrypt": "^5.1.0",
     "bootstrap": "^5.2.3",
     "concurrently": "^7.6.0",
     "connect-mongo": "^4.6.0",
@@ -31,9 +33,11 @@
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.2",
+    "supertest": "^6.3.3",
     "vitest": "^0.29.2"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/bootstrap": "^5.2.6",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.13",
@@ -43,6 +47,7 @@
     "@types/passport-local": "^1.0.35",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
+    "@types/supertest": "^2.0.12",
     "@vitejs/plugin-react": "^3.1.0",
     "sass": "^1.58.3",
     "typescript": "^4.9.3",

@@ -2,7 +2,8 @@ import mongoose, { PopulatedDoc, Types} from "mongoose";
 import { IDayplan } from "./Dayplan";
 
 export interface IUser {
-    username: string
+    username: string,
+    password: string,
     _id: Types.ObjectId,
     dayPlans:  IDayplan[],
     weekGoals: string[]

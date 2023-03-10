@@ -5,11 +5,10 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoDBConnect from "connect-mongo";
-import path from "path";
 import passport from "passport";
+import bcrypt from "bcrypt"
 import passportLocal from "passport-local";
 import { UserModel } from "./models/UserModel";
-import { IUser } from "../common/types/User";
 import userRouter from "./routes/user";
 import plansRouter from "./routes/plans";
 
@@ -25,9 +24,8 @@ if(!isProduction) {
     dotenv.config();
 }
 //log on error 
-mongoose.connect(dbUrl).then( val =>{
+export const connection =  mongoose.connect(dbUrl).then( val =>{
     console.log("Connected to the database");
-    
 } ).catch(error =>{
     if(error){
         console.log(error);
@@ -68,17 +66,69 @@ app.use(session(sessionConfig))
 //initialize passport session
 app.use(passport.initialize());
 app.use(passport.session());
-//initilize passport
-passport.use(new passportLocal.Strategy(UserModel.authenticate()));
-passport.serializeUser(UserModel.serializeUser());
-passport.deserializeUser(UserModel.deserializeUser());
+//create strategy 
+
+//Creating Local Strategy. passport-local-mongoose 3 lines of code for Strategy, 
+//Serialiazation, Deserialization not working due to recent changes in Mongoose 7
+
+passport.use(new passportLocal.Strategy((username,password,done)=>{  //done is a callback function
+    try{
+        UserModel.findOne({username:username}).then(user=>{
+            if (!user){
+                return done(null,false, {message:"Incorrect Username"})
+            }
+ //using bcrypt to encrypt passoword in register post route and compare function in login post round. 
+ //login post route will check here during authentication so need to use compare here  
+            bcrypt.compare(password,user.password,function(err,result){ 
+                if (err){
+                    return done(err)
+                }
+
+                if (result) {
+                    return done(null,user)
+                }
+                else {
+                    return done (null,false, {message:"Incorrect Password"})
+                }
+            })
+
+        })
+    }
+    catch (err){
+            return done(err)
+    }
+
+}))
+//serialize user
+passport.serializeUser(function(user, done) {
+    done(null, user.id);
+  });
+  
+//deserialize user  
+passport.deserializeUser(function(id, done) {
+    try {
+        UserModel.findById(id).then(user=>{
+            done(null,user);
+        })
+    }
+    catch (err){
+        done(err);
+    }
+  });
+// passport.use(new passportLocal.Strategy(UserModel.authenticate()));
+// passport.serializeUser(UserModel.serializeUser());
+// passport.deserializeUser(UserModel.deserializeUser());
 
 app.use("/api",userRouter);
 app.use("/api",plansRouter);
 
+app.get("/", (req,res) =>{
+    res.send("Hello world");
+});
 
 const port =  process.env.port || 3000;
 
 app.listen(port, () =>{
     console.log("Listening on port: ",port);
 })
+export const server = app;

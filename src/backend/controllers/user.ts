@@ -40,6 +40,8 @@ export const registerController =async (req:Request<{},{},IRegisterRequest>, res
             //create new user
             const newUser = new UserModel({
                 weekGoals: ["nothing for now"],
+                username: req.body.username,
+                password: "dummy pass"
             });
             //create a example daily plan for user
             const userDailyPlanExample = new DayPlanModel({
@@ -47,7 +49,8 @@ export const registerController =async (req:Request<{},{},IRegisterRequest>, res
                 tasks: [{
                         startTime: Date.now(),
                         endTime: Date.now() + 3600000 ,
-                        taskName: "example task",
+                        name: "example task",
+                        isFinished: false
                 }]
             });
             newUser.dayPlans.push(userDailyPlanExample._id);
@@ -57,7 +60,7 @@ export const registerController =async (req:Request<{},{},IRegisterRequest>, res
             const registeredUser = await UserModel.register(newUser, req.body.password);
             //save the user
             await registeredUser.save();
-            res.status(200);
+            res.status(200).send();
         } else {
             res.status(400).json({message: "username already in use"});
         }
