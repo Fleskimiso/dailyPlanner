@@ -19,7 +19,7 @@ const LoginPage = () => {
                     <div className="form-group mb-3">
                         <label className="mb-1" htmlFor="username">Username</label>
                         <input type="text"
-                        onChange={(e) =>{setpassword(e.target.value)}}
+                        onChange={(e) =>{setUsername(e.target.value)}}
                             value={username}
                             className="form-control"
                             id="username"

@@ -20,7 +20,11 @@ const dayPlanSchema = new mongoose.Schema<IDayplanModel>({
             required: true
         }
     }],
-    dayGoals: [String]
+    dayGoals: [String],
+    day: {
+        type: Date,
+        required: true
+    }
 });
 
 export const DayPlanModel = mongoose.model<IDayplanModel>("DayPlan", dayPlanSchema);

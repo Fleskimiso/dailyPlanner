@@ -9,6 +9,8 @@ export interface IDayplan {
     isFinished: boolean,
     _id: Types.ObjectId
    }[],
+   day: Date,
    dayGoals: string[]
 }
+//model for mongoose
 export interface IDayplanModel extends IDayplan, mongoose.Document {}

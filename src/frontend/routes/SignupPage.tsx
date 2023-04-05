@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useAppDispatch } from "../store/hooks";
+import { registerUserThunk } from "../store/thunks/RegisterUserThunk";
 
 const SignupPage = () =>{
     const [username, setUsername] = useState("");
@@ -6,10 +8,23 @@ const SignupPage = () =>{
     //password2 - retyped password
     const [password2,setpassword2] = useState("");
 
+    const dispatch = useAppDispatch();
+
+
     const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        console.log("Hello there");
-        
+        if(password !== password2){
+            alert("Passwords do not match"); //should set the error        
+        }else {
+            dispatch(registerUserThunk({
+                username: username,
+                password: password
+            })).then(resp =>{
+                alert(resp.payload); //
+            }).catch(e =>{
+                alert(e); 
+            })
+        }
     }
 
     return <div className="mt-5 d-flex flex-row justify-content-center">
@@ -20,7 +35,7 @@ const SignupPage = () =>{
                     <div className="form-group my-2">
                         <label className="mb-1" htmlFor="username">Username</label>
                         <input type="text"
-                        onChange={(e) =>{setpassword(e.target.value)}}
+                        onChange={(e) =>{setUsername(e.target.value)}}
                             value={username}
                             className="form-control"
                             id="username"
@@ -44,7 +59,7 @@ const SignupPage = () =>{
                         <label className="mb-1" htmlFor="passwrod2">Retype password</label>
                         <input
                         onChange={(e) =>{setpassword2(e.target.value)}}
-                            value={password}
+                            value={password2}
                             type="password"
                             name="password2"
                             className="form-control"

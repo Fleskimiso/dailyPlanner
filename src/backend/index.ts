@@ -8,9 +8,9 @@ import MongoDBConnect from "connect-mongo";
 import passport from "passport";
 import bcrypt from "bcrypt"
 import passportLocal from "passport-local";
-import { UserModel } from "./models/UserModel";
-import userRouter from "./routes/user";
-import plansRouter from "./routes/plans";
+import { UserModel } from "./models/UserModel.js";
+import userRouter from "./routes/user.js";
+import plansRouter from "./routes/plans.js";
 
 
 
