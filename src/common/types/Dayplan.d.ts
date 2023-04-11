@@ -1,6 +1,6 @@
 import mongoose, {  Types} from "mongoose";
 
-export interface IDayplan {
+export interface IDayPlan {
     _id: Types.ObjectId,
    tasks: {
     startTime: Date,
@@ -13,4 +13,4 @@ export interface IDayplan {
    dayGoals: string[]
 }
 //model for mongoose
-export interface IDayplanModel extends IDayplan, mongoose.Document {}
+export interface IDayplanModel extends IDayPlan, mongoose.Document {}

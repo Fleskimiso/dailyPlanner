@@ -5,6 +5,7 @@ import { IErrorResponse } from "../Responses/ErrorResponse";
 import { ILoginResponse, IRegisterResponse } from "../Responses/UserResponse";
 import { ILoginRequest, IRegisterRequest } from "../Requests/UserRequests";
 import { loginFormSchema, registerFormSchema } from "../validators/user.js";
+import { IDayPlan } from "../types/Dayplan.js";
 
 
 export const loginController = async (req: Request<{}, {}, ILoginRequest>, res: Response<ILoginResponse | IErrorResponse>) => {
@@ -12,25 +13,19 @@ export const loginController = async (req: Request<{}, {}, ILoginRequest>, res: 
     try {
         const user = await UserModel.findOne({ username: req.body.username });
         if (user) {
-            req.login(user, (err) => {
+            req.login(user, async (err) => {
                 if (err) {
-                    res.status(404).send({ message: "Error occured during logging in (maybe bad password)" });
+                    res.status(404).send({ message: "Error occured during logging in" });
                 } else {
                     req.session.user = user;
-                    res.status(200).send({
-                        userId: user._id.toString(),
-                        username: user.username,
-                        weekGoals: user.weekGoals,
-                        dayPlans: [{
-                            dayGoals: ["x"],
-                            tasks: [{
-                                startTime: Date.now(), //dummy data for now
-                                endTime: Date.now() + 3600000,
-                                name: "example task",
-                                isFinished: false
-                            }],
-                            day: Date.now()
-                        }]
+                    const userDayPlans = (await user.populate<{ dayPlans: IDayPlan[]; }>({
+                        path: "dayPlans"
+                    })).dayPlans;
+                    res.status(200).json({
+                       username: user.username,
+                       userId: String(user._id),
+                       weekGoals: user.weekGoals,
+                       dayPlans: userDayPlans
                     });
 
                 }
@@ -79,7 +74,8 @@ export const registerController = async (req: Request<{}, {}, IRegisterRequest>,
                 dayPlans: [{
                     dayGoals: userDailyPlanExample.dayGoals,
                     tasks: userDailyPlanExample.tasks,
-                    day: userDailyPlanExample.day
+                    day: userDailyPlanExample.day,
+                    _id: userDailyPlanExample._id
                 }]
             });
         } else {

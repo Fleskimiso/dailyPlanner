@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../store/hooks";
+import { userSlice } from "../store/slices/userSlice";
 import { registerUserThunk } from "../store/thunks/RegisterUserThunk";
 
 const SignupPage = () =>{
@@ -7,6 +9,7 @@ const SignupPage = () =>{
     const [password, setpassword] = useState("");
     //password2 - retyped password
     const [password2,setpassword2] = useState("");
+    const navigate = useNavigate();
 
     const dispatch = useAppDispatch();
 
@@ -14,15 +17,15 @@ const SignupPage = () =>{
     const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if(password !== password2){
-            alert("Passwords do not match"); //should set the error        
+            dispatch(userSlice.actions.setError("Password do not match"));
         }else {
             dispatch(registerUserThunk({
                 username: username,
                 password: password
             })).then(resp =>{
-                alert(resp.payload); //
+                navigate("/");
             }).catch(e =>{
-                alert(e); 
+                dispatch(userSlice.actions.setError(e.message));
             })
         }
     }

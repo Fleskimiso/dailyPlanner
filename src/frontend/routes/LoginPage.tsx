@@ -1,13 +1,26 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../store/hooks";
+import { userSlice } from "../store/slices/userSlice";
+import { loginUserThunk } from "../store/thunks/LoginUserThunk";
 
 const LoginPage = () => {
 
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setpassword] = useState("");
 
     const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        console.log("Hello there");
+        dispatch(loginUserThunk({
+            username: username,
+            password: password
+        })).then(resp =>{
+            navigate("/");
+        }).catch(e =>{
+            dispatch(userSlice.actions.setError(e.message));
+        })
         
     }
 
