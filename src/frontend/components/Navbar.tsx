@@ -1,8 +1,21 @@
-import { useAppSelector } from "../store/hooks";
-import {Link} from "react-router-dom"
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import {Link, useNavigate} from "react-router-dom"
+import { logoutUserThunk } from "../store/thunks/LogoutUserThunk";
 const Navbar = () => {
 
+
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const isLoggedIn = useAppSelector(state => state.user.isLogged);
+
+    const logout = (e: React.MouseEvent<HTMLDivElement>) =>{
+        e.preventDefault();
+        dispatch(logoutUserThunk()).then((resp) =>{
+            if(resp.payload === "Ok"){
+                navigate("/");
+            }
+        });
+    }
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light" 
@@ -27,7 +40,7 @@ const Navbar = () => {
                         {
                             isLoggedIn && <li className="nav-item mx-2">
                                 {/* should logout on click */}
-                                <Link className="nav-link" to="/logout">Logout</Link>
+                                <div className="nav-link" onClick={logout} >Logout</div>
                             </li>
                         }
                     </ul>

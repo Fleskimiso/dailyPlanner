@@ -42,13 +42,13 @@ const LoginPage = () => {
                         <small id="emailHelp" className="form-text text-muted">Provide your username</small>
                     </div>
                     <div className="form-group">
-                        <label className="mb-1" htmlFor="passwrod">Password</label>
+                        <label className="mb-1" htmlFor="password">Password</label>
                         <input
                         onChange={(e) =>{setpassword(e.target.value)}}
                             value={password}
                             type="password"
                             className="form-control"
-                            id="passwrod"
+                            id="password"
                             placeholder="Password" />
                     </div>
 

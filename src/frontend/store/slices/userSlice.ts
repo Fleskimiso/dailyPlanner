@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { loginUserThunk } from '../thunks/LoginUserThunk';
 import { registerUserThunk } from '../thunks/RegisterUserThunk';
 import { IDayPlan } from '../../../common/types/Dayplan';
+import { logoutUserThunk } from '../thunks/LogoutUserThunk';
 
 export interface UserState {
   userId: string,
@@ -54,6 +55,15 @@ export const userSlice = createSlice({
         state.weekGoals.push(...action.payload.weekGoals);
         state.dayPlans.length = 0;
         state.dayPlans.push(...action.payload.dayPlans);
+      }
+    });
+    builder.addCase(logoutUserThunk.fulfilled, (state,action) =>{
+      if(action.payload === "Ok") {
+        state.isLogged = false;
+        state.dayPlans.length = 0;
+        state.userId = "none";
+        state.username = "none";
+        state.weekGoals.length = 0;
       }
     })
   },

@@ -5,7 +5,7 @@ const userRouter = express.Router();
 
 userRouter.post("/login", validateLogin , loginController);
 userRouter.post("/register", validateRegistration, registerController);
-userRouter.post("/logout", logoutController );
+userRouter.get("/logout", logoutController );
 
 
 
