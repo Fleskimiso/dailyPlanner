@@ -1,0 +1,55 @@
+:root {
+    --ocean: #ECF9FF;
+    --creamy: #FFFBEB;
+    --lighter-orange: #FFE7CC;
+    --light-orange: #F8CBA6;
+    /* other palette */
+    --white: #FFFAF4;
+    --maroon: #D25380;
+    --orange: #E08E6D;
+    --belge: #F6C391;
+}
+
+.w-200px {
+    width: 200px;
+    min-width: 200px;
+}
+.line-break {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, var(--belge), var(--maroon));
+}
+.label-text {
+    min-width: fit-content;
+    color: var(--belge);
+}
+.plan-input-container {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 10%;
+    border: 1px solid var(--belge);
+    box-shadow:  0px 0px 30px 30px var(--white);
+}
+.plan-day-input {
+    background-color: var(--white);
+    color: var(--maroon);
+    border: 1px solid var(--maroon);
+    padding: 10px;
+    border-radius: 20%;
+}
+.plan-input-button {
+    background: var(--belge);
+    color: var(--maroon);
+    padding: 10px;
+    border-radius: 20%;
+    border: 1px solid var(--maroon)
+}
+.text-maroon {
+    color: var(--maroon);
+}
+.plan-container {
+    background: var(--white);
+    border-radius: 15%;
+    padding: 30px;
+    box-shadow:  0px 0px 30px 30px var(--white);
+}

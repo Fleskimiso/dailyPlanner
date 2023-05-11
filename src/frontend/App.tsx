@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Provider } from 'react-redux'
 import { store } from './store/store'
 import Loading from './components/Loading';
+import "./styles/index.css";
 
 const HomePage = lazy(() => import("./routes/HomePage"));
 const LoginPage = lazy(() => import("./routes/LoginPage"));
