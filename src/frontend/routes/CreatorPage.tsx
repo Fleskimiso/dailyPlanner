@@ -13,7 +13,8 @@ const CreatorPage = () => {
         taskStartTime: number,
         taskEndTime: number,
         completed: boolean
-    }[]>([])
+    }[]>([]);
+    const [currentDayGoals, setCurrentDayGoals] = useState<String[]>([]);
 
     const submitTask = () => {
         if (currentTaskName != "" && currentTaskStartTime != "" && currentTaskEndTime != "") {
@@ -36,20 +37,27 @@ const CreatorPage = () => {
             setCurrentTaskName("");
         }
     }
+    const submitDayGoal = () => {
+        if (currentDayGoal != "") {
+            setCurrentDayGoals([currentDayGoal, ...currentDayGoals]);
+            setCurrentDayGoal("");
+        }
+    }
 
-    return <div className="container d-flex flex-row justify-content-evenly mt-5">
-        <div className="d-flex flex-column justify-content-center w-50 mt-1 plan-input-container">
+
+    return <div className="container d-flex  flex-column flex-md-row justify-content-evenly mt-5">
+        <div className="d-flex flex-column justify-content-center mb-5 mb-md-0 w-md-50 mt-1 plan-input-container">
             <div className="my-2 d-flex flex-row align-items-center">
                 <label className="label-text" htmlFor="day">Day</label>
                 <span className="line-break"></span>
-                <input className="ms-auto w-200px plan-day-input" onChange={e => {
+                <input className="ms-auto  w-200px  plan-day-input" onChange={e => {
                     setCurrentDay(e.target.value);
                 }} value={currentDay} type="date" name="day" id="day" />
             </div>
             <div className="my-2 d-flex flex-row align-items-center">
                 <label className="label-text" htmlFor="task">Task name</label>
                 <span className="line-break"></span>
-                <input className="ms-auto w-200px plan-day-input" type="text" name="task" id="task" value={currentTaskName}
+                <input className="ms-auto w-md-200px  plan-day-input" type="text" name="task" id="task" value={currentTaskName}
                     onChange={e => {
                         setCurrentTaskName(e.target.value);
                     }} />
@@ -57,7 +65,7 @@ const CreatorPage = () => {
             <div className="my-2 d-flex flex-row align-items-center">
                 <label className="label-text" htmlFor="startTime">Task start time</label>
                 <span className="line-break"></span>
-                <input className="ms-auto w-200px plan-day-input" type="time" name="startTime" id="startTime" value={currentTaskStartTime}
+                <input className="ms-auto w-md-200px  plan-day-input" type="time" name="startTime" id="startTime" value={currentTaskStartTime}
                     onChange={e => {
                         console.log(e.target.value);
                         setCurrentTaskStartTime(e.target.value);
@@ -67,7 +75,7 @@ const CreatorPage = () => {
             <div className="my-2 d-flex flex-row align-items-center">
                 <label className="label-text" htmlFor="endTime">Task end time</label>
                 <span className="line-break"></span>
-                <input className="ms-auto w-200px plan-day-input" type="time" name="endTime" id="endTime" value={currentTaskEndTime}
+                <input className="ms-auto w-md-200px  plan-day-input" type="time" name="endTime" id="endTime" value={currentTaskEndTime}
                     onChange={e => {
                         setCurrentTaskEndTime(e.target.value);
                     }} />
@@ -88,7 +96,7 @@ const CreatorPage = () => {
             <div className="my-2 d-flex flex-row align-items-center">
                 <label className="label-text" htmlFor="dayGoal">Add day Goal</label>
                 <span className="line-break"></span>
-                <input className="ms-auto w-200px plan-day-input" type="text" name="dayGoal" id="dayGoal" value={currentDayGoal}
+                <input className="ms-auto w-md-200px  plan-day-input" type="text" name="dayGoal" id="dayGoal" value={currentDayGoal}
                     onChange={e => {
                         setCurrentDayGoal(e.target.value);
                     }} />
@@ -99,34 +107,50 @@ const CreatorPage = () => {
                     <label htmlFor="">Add goal for the day</label>
                 </div>
                 <div>
-                    <button className="plan-input-button">Submit</button>
+                    <button
+                        onClick={(e) => { e.preventDefault(); submitDayGoal(); }}
+                        className="plan-input-button">Submit</button>
                 </div>
             </div>
 
         </div>
 
-        <div className="plan-container mt-1 d-flex flex-column justify-content-start">
-            <div className="text-center mb-2 text-maroon h5">
-                Current Plan
+        <div className="plan-container mt-1 d-flex flex-column justify-content-between">
+            <div>
+                <div className="text-center mb-2 text-maroon h5">
+                    Current Plan
+                </div>
+                <div>
+                    {currentDayPlan.map(task => {
+                        return <div key={task.taskName} className="text-maroon py-1">
+                            {task.taskName} {" - "} {
+                                new Date(task.taskStartTime).getHours()
+                                + ":"
+                                + (new Date(task.taskStartTime).getMinutes() < 10 ?
+                                    "0" + new Date(task.taskStartTime).getMinutes()
+                                    : new Date(task.taskStartTime).getMinutes())
+                            } {" to "} {
+                                new Date(task.taskEndTime).getHours()
+                                + ":"
+                                + (new Date(task.taskEndTime).getMinutes() < 10 ?
+                                    "0" + new Date(task.taskEndTime).getMinutes()
+                                    : new Date(task.taskEndTime).getMinutes())
+                            }
+                        </div>
+                    })}
+                </div>
             </div>
             <div>
-                {currentDayPlan.map(task => {
-                    return <div key={task.taskName} className="text-maroon py-1">
-                        {task.taskName} {" - "} {
-                            new Date(task.taskStartTime).getHours()
-                            + ":"
-                            + (new Date(task.taskStartTime).getMinutes() < 10 ?
-                                "0" + new Date(task.taskStartTime).getMinutes()
-                                : new Date(task.taskStartTime).getMinutes())
-                        } {" to "} {
-                            new Date(task.taskEndTime).getHours()
-                            + ":"
-                            + (new Date(task.taskEndTime).getMinutes() < 10 ?
-                            "0" + new Date(task.taskEndTime).getMinutes()
-                            : new Date(task.taskEndTime).getMinutes())
-                        }
-                    </div>
-                })}
+            <div className="text-center mb-2 text-maroon h5">
+                    Day goals
+                </div>
+                <ul>
+                    {currentDayGoals.map(goal =>{
+                        return <li key={String(goal)} className="text-maroon py-1">
+                                {goal}
+                        </li>
+                    })}
+                </ul>
             </div>
         </div>
 

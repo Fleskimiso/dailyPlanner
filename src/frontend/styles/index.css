@@ -10,9 +10,19 @@
     --belge: #F6C391;
 }
 
-.w-200px {
+.w-md-200px {
+    max-width: 200px;
     width: 200px;
     min-width: 200px;
+}
+.w-200px {
+    min-width: 200px;
+    width: 200px;
+    max-width: 220px;
+}
+.w-md-50 {
+    min-width: 50%;
+    width: auto;
 }
 .line-break {
     width: 100%;
@@ -53,3 +63,27 @@
     padding: 30px;
     box-shadow:  0px 0px 30px 30px var(--white);
 }
+@media screen and (max-device-width: 800px) and (orientation: portrait) {
+    /* some CSS here */
+    .w-md-200px {
+        max-width: 175px;
+        width: 150px;
+        min-width: 140px;
+    }
+    .w-md-50 {
+        min-width: 75%;
+        width: 70%;
+    }
+   
+  }
+  @media screen and (max-device-width: 640px) and (orientation: portrait)  {
+    .w-md-200px {
+        max-width: 150px;
+        width: 125px;
+        min-width: 125px;
+    }
+    .w-md-50 {
+        min-width: 100%;
+        width: 100%;
+    }
+  }

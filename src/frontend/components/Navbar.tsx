@@ -21,7 +21,7 @@ const Navbar = () => {
         <nav className="navbar navbar-expand-lg navbar-light bg-light" 
         style={{marginLeft: "-10px",marginRight: "-10px" }} >
             <div className="container-fluid d-flex flex-row">
-                <a className="navbar-brand" href="#">Planner</a>
+                <Link className="navbar-brand" to="/">Planner</Link>
 
                 <div className="" id="navbarNavDropdown">
                     <ul className="navbar-nav d-flex flex-row ">
