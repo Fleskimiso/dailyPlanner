@@ -1,6 +1,10 @@
 import { useState } from "react"
+import { useAppDispatch } from "../store/hooks";
+import { submitDayPlanThunk } from "../store/thunks/SubmitDayPlanThunk";
 
 const CreatorPage = () => {
+
+    const dispatch = useAppDispatch();
 
     const [currentDay, setCurrentDay] = useState('');
     const [currentTaskName, setCurrentTaskName] = useState('');
@@ -9,12 +13,12 @@ const CreatorPage = () => {
     const [currentDayGoal, setCurrentDayGoal] = useState('');
 
     const [currentDayPlan, setCurrentDayPlan] = useState<{
-        taskName: string,
-        taskStartTime: number,
-        taskEndTime: number,
-        completed: boolean
+        name: string,
+        startTime: number,
+        endTime: number,
+        isFinished: boolean
     }[]>([]);
-    const [currentDayGoals, setCurrentDayGoals] = useState<String[]>([]);
+    const [currentDayGoals, setCurrentDayGoals] = useState<string[]>([]);
 
     const submitTask = () => {
         if (currentTaskName != "" && currentTaskStartTime != "" && currentTaskEndTime != "") {
@@ -28,10 +32,10 @@ const CreatorPage = () => {
                 + Number(currentTaskEndTime.split(":")[1]) * 60 * 1000;
             setCurrentDayPlan([
                 ...currentDayPlan, {
-                    taskName: currentTaskName,
-                    taskStartTime,
-                    taskEndTime,
-                    completed: false
+                    name: currentTaskName,
+                    startTime: taskStartTime,
+                    endTime: taskEndTime,
+                    isFinished: false
                 }
             ]);
             setCurrentTaskName("");
@@ -44,8 +48,24 @@ const CreatorPage = () => {
         }
     }
 
+    const submitDayPlan = () =>{
+        if(currentDayPlan.length > 0) {
+            dispatch(submitDayPlanThunk({
+                tasks: currentDayPlan,
+                day: currentDay,
+                dayGoals: currentDayGoals
+            })).then(resp =>{
+                console.log("success");
+                //TODO Error handling
+            }).catch(e =>{
+                console.log(e);
+            })
+        }
+    }
 
-    return <div className="container d-flex  flex-column flex-md-row justify-content-evenly mt-5">
+
+    return <div className="container d-flex flex-column  mt-5">
+        <div className="d-flex  flex-column flex-md-row justify-content-evenly">
         <div className="d-flex flex-column justify-content-center mb-5 mb-md-0 w-md-50 mt-1 plan-input-container">
             <div className="my-2 d-flex flex-row align-items-center">
                 <label className="label-text" htmlFor="day">Day</label>
@@ -122,19 +142,19 @@ const CreatorPage = () => {
                 </div>
                 <div>
                     {currentDayPlan.map(task => {
-                        return <div key={task.taskName} className="text-maroon py-1">
-                            {task.taskName} {" - "} {
-                                new Date(task.taskStartTime).getHours()
+                        return <div key={task.name} className="text-maroon py-1">
+                            {task.name} {" - "} {
+                                new Date(task.startTime).getHours()
                                 + ":"
-                                + (new Date(task.taskStartTime).getMinutes() < 10 ?
-                                    "0" + new Date(task.taskStartTime).getMinutes()
-                                    : new Date(task.taskStartTime).getMinutes())
+                                + (new Date(task.startTime).getMinutes() < 10 ?
+                                    "0" + new Date(task.startTime).getMinutes()
+                                    : new Date(task.startTime).getMinutes())
                             } {" to "} {
-                                new Date(task.taskEndTime).getHours()
+                                new Date(task.endTime).getHours()
                                 + ":"
-                                + (new Date(task.taskEndTime).getMinutes() < 10 ?
-                                    "0" + new Date(task.taskEndTime).getMinutes()
-                                    : new Date(task.taskEndTime).getMinutes())
+                                + (new Date(task.endTime).getMinutes() < 10 ?
+                                    "0" + new Date(task.endTime).getMinutes()
+                                    : new Date(task.endTime).getMinutes())
                             }
                         </div>
                     })}
@@ -153,7 +173,16 @@ const CreatorPage = () => {
                 </ul>
             </div>
         </div>
+        </div>
 
+                    <div className="container d-flex flex-row justify-content-center">
+                            <div className="m-2 p-2 mt-5">
+                            <button onClick={e => {
+                                e.preventDefault();
+                                submitDayPlan();  
+                            }} className="plan-input-button">Send Plan</button>
+                            </div>
+                    </div>
     </div>
 }
 export default CreatorPage

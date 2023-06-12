@@ -3,6 +3,7 @@ import { loginUserThunk } from '../thunks/LoginUserThunk';
 import { registerUserThunk } from '../thunks/RegisterUserThunk';
 import { IDayPlan } from '../../../common/types/Dayplan';
 import { logoutUserThunk } from '../thunks/LogoutUserThunk';
+import { submitDayPlanThunk } from '../thunks/SubmitDayPlanThunk';
 
 export interface UserState {
   userId: string,
@@ -65,6 +66,14 @@ export const userSlice = createSlice({
         state.username = "none";
         state.weekGoals.length = 0;
       }
+    });
+    builder.addCase(submitDayPlanThunk.fulfilled, (state, action) =>{
+      if(action.meta.requestStatus === "fulfilled") {
+        if(typeof action.payload !== "string") {
+          state.dayPlans.push(action.payload.dayPlan)
+        }
+      }
     })
   },
+ 
 });
