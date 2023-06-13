@@ -2,6 +2,7 @@ import { describe, expect, it, beforeAll } from "vitest";
 import supertest from "supertest";
 import { server } from "..";
 import mongoose from "mongoose";
+
 describe("userEndpoints", () => {
     const requestWithSupertest = supertest(server);
     const requestWithSupertestAgent = supertest.agent(server);

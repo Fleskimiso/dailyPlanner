@@ -8,3 +8,6 @@ export interface ISubmitPlanRequest {
     dayGoals: string[],
     day: string
 }
+export interface IGetPlanRequest {
+    day: string
+}
